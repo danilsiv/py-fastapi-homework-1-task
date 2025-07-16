@@ -1,5 +1,3 @@
-from math import ceil
-
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -28,7 +26,7 @@ async def read_movies(
 
     total_query = await db.execute(select(func.count()).select_from(MovieModel))
     total_items = total_query.scalar()
-    total_pages = ceil((total_items + per_page - 1) // per_page)
+    total_pages = (total_items + per_page - 1) // per_page
 
     prev_page = f"{router.prefix}/?page={page - 1}&per_page={per_page}" if page > 1 else None
     next_page = f"{router.prefix}/?page={page + 1}&per_page={per_page}" if page < total_pages else None

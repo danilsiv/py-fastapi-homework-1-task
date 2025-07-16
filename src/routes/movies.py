@@ -14,7 +14,7 @@ router = APIRouter(
 async def read_movies(
         page: int = Query(1, ge=1),
         per_page: int = Query(10, ge=1, le=20),
-        db: AsyncSession=Depends(get_db)
+        db: AsyncSession = Depends(get_db)
 ):
     offset = (page - 1) * per_page
     query = select(MovieModel).offset(offset).limit(per_page)
@@ -41,8 +41,8 @@ async def read_movies(
 
 
 @router.get("/{movie_id}/", response_model=MovieDetailResponseSchema)
-async def get_movie(movie_id: int, db: AsyncSession=Depends(get_db)):
-    result = await db.execute(select(MovieModel).where(MovieModel.id==movie_id))
+async def get_movie(movie_id: int, db: AsyncSession = Depends(get_db)):
+    result = await db.execute(select(MovieModel).where(MovieModel.id == movie_id))
     movie = result.scalar_one_or_none()
     if movie is None:
         raise HTTPException(
